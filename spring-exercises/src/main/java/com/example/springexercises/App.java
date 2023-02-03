@@ -1,7 +1,11 @@
 package com.example.springexercises;
 
 import com.example.springexercises.entities.Book;
+import com.example.springexercises.entities.Student;
+import com.example.springexercises.entities.Subject;
 import com.example.springexercises.repositories.BookRepository;
+import com.example.springexercises.repositories.StudentRepository;
+import com.example.springexercises.repositories.SubjectRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
@@ -17,6 +21,8 @@ public class App {
 		ApplicationContext spring = SpringApplication.run(App.class, args);
 
 		BookRepository bookRepository = spring.getBean(BookRepository.class);
+		StudentRepository studentRepository = spring.getBean(StudentRepository.class);
+		SubjectRepository subjectRepository = spring.getBean(SubjectRepository.class);
 
 		System.out.println("||| Save Book |||");
 		Book book1 = new Book(null, "book1", 9.99, 150);
@@ -53,6 +59,20 @@ public class App {
 		} else {
 			System.out.println("There is no book with this ID");
 		}
+
+		System.out.println("||| Many to Many |||");
+
+		Subject subject1 = new Subject(null, "Math");
+		Subject subject2 = new Subject(null, "Tech");
+
+		subjectRepository.saveAll(List.of(subject1, subject2));
+
+		Student student1 = new Student(null, null, "Student1", 25);
+		student1.getSubjects().add(subject1);
+		student1.getSubjects().add(subject2);
+
+		Student student2 = new Student(null, null, "Student2", 31);
+		student2.getSubjects().add(subject1);
 
 	}
 
